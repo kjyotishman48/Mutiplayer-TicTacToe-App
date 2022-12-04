@@ -17,10 +17,13 @@ import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class DashboardFragment extends Fragment {
 
   private static final String TAG = "DashboardFragment";
   private NavController mNavController;
+  private FirebaseAuth mAuth;
 
   /**
    * Mandatory empty constructor for the fragment manager to instantiate the
@@ -50,7 +53,12 @@ public class DashboardFragment extends Fragment {
     mNavController = Navigation.findNavController(view);
 
     // TODO if a user is not logged in, go to LoginFragment
-
+    // Initialize Firebase Auth
+    mAuth = FirebaseAuth.getInstance();
+    if(mAuth.getCurrentUser() == null) {
+      mNavController.navigate(R.id.action_need_auth);
+      return;
+    }
     // Show a dialog when the user clicks the "new game" button
     view.findViewById(R.id.fab_new_game).setOnClickListener(v -> {
 
