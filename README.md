@@ -115,7 +115,7 @@ Fix : Added a color in the colors.xml res file <color name="hint_text_color">#75
  
 ### Talkback
  
-The talkback expecience was good because the content description of various UI elements are dynamically unpdated with the content of the UI element and a readable and easily understandable text was set, this provides a good expericence for any user who is using the app by talk back, as they can undertand the updated state of the game.
+The talkback expecience was good because the content description of various UI elements are dynamically updated with the change in the content/text of the UI elements and a readable and easily understandable text was set, this provides a good expericence for any user who is using the app by talk back, as they can undertand the updated state of the game.
  
 ## D) Hosting and Running Aap
  
