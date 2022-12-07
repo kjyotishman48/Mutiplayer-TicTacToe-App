@@ -1,4 +1,4 @@
-# Tic Tac Toe (CS F214 Ass5gnment 5)
+# Tic Tac Toe (CS F214 Assignment 5)
  
 ## A) Submission Details
    Name of Project : Assignment 5 - Tic Tac Toe <br />
