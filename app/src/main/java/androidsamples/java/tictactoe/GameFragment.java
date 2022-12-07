@@ -278,7 +278,6 @@ public class GameFragment extends Fragment {
 
   private boolean checkDraw() {
     if (checkWin() != 0) return false;
-    Log.i("CHECKING WIN IN DRAW", "Complete: " + checkWin());
     for (int i = 0; i < 9; i++) {
       if (gameArray[i].isEmpty()) {
         return false;
@@ -348,7 +347,6 @@ public class GameFragment extends Fragment {
         }
         break;
       default:
-        Log.i("CHECKING DRAW", "Error: " + win);
         break;
     }
     for (int i = 0; i < 9; i++) {
@@ -438,7 +436,6 @@ public class GameFragment extends Fragment {
       return;
     }
     while (!gameArray[x].isEmpty()) x = rand.nextInt(9);
-    Log.i("CHECKING CONDITIONS", "Complete");
     gameArray[x] = otherChar;
     mButtons[x].setText(otherChar);
     mButtons[x].setClickable(false);
