@@ -149,8 +149,8 @@ For me the difficulty level of the assignment 9/10.
 
 ## Acknowledgement
 
-I referred the following documentations
-https://firebase.google.com/docs/auth/where-to-start
+I referred the following documentations<br>
+https://firebase.google.com/docs/auth/where-to-start<br>
 https://firebase.google.com/docs/database/android/start
 
 I would like to thank my friends Ricky Patel, Hitarth Kothari, Puru Narayan and Dhruv Chovatiya who help me with the app logic, the idea behind the multiplayer logic and reported certain bugs and issues in my app.
