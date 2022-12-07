@@ -134,7 +134,6 @@ public class DashboardFragment extends Fragment {
           gameId = gamesRef.push().getKey();
           assert gameId != null;
           gamesRef.child(gameId).setValue(new GameModel(FirebaseAuth.getInstance().getCurrentUser().getUid(), gameId, email_id, false, false));
-          Log.i("FIREBASE", "Value set");
         } else if (which == DialogInterface.BUTTON_NEGATIVE) {
           gameType = getString(R.string.one_player);
         }
