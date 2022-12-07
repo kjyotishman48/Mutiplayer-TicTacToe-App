@@ -17,6 +17,9 @@
 
   <string name="new_game_dialog_message">Which type of game do you want to create?</string>
   <string name="forfeit_game_dialog_message">Are you sure you want to forfeit this game?</string>
+  <string name="win_game_dialog_message">Congratulations! You won !</string>
+  <string name="lost_game_dialog_message">Sorry! You lost !</string>
+  <string name="draw_game_dialog_message">Game drawn</string>
 
   <string name="two_player">Two-Player</string>
   <string name="one_player">One-Player</string>
@@ -24,4 +27,31 @@
   <string name="yes">Yes</string>
   <string name="cancel">Cancel</string>
   <string name="confirm">Confirm</string>
+  <string name="game_info">Game Info</string>
+  <string name="_1">1)</string>
+  <string name="open_multiplayer_games">Open multiplayer games</string>
+  <string name="won_score">Won Score</string>
+  <string name="lost_score">Lost Score</string>
+  <string name="_0">0</string>
+  <string name="your_turn">Your Turn</string>
+  <string name="waiting">Waiting</string>
+  <string name="you_win">You Win</string>
+  <string name="you_lose">You lose</string>
+  <string name="draw">Draw</string>
+  <string name="error">Error</string>
+  <string name="go_back">Go Back</string>
+  <string name="quit">QUIT</string>
+  <string name="ok">OK</string>
+  <string name="draw_score">Draw Score</string>
+  <string name="you_are_login_as">Logged in as ******@*****.com</string>
+  <string name="this_is_the_recyler_view_which_will_show_the_list_of_available_games">This is the recyler view which will show the list of available games</string>
+  <string name="grid_1_is_not_set_double_press_to_set_this_grid">Grid 1 is not set, double press to set this grid</string>
+  <string name="grid_2_is_not_set_double_press_to_set_this_grid">Grid 2 is not set, double press to set this grid</string>
+  <string name="grid_3_is_not_set_double_press_to_set_this_grid">Grid 3 is not set, double press to set this grid</string>
+  <string name="grid_4_is_not_set_double_press_to_set_this_grid">Grid 4 is not set, double press to set this grid</string>
+  <string name="grid_5_is_not_set_double_press_to_set_this_grid">Grid 5 is not set, double press to set this grid</string>
+  <string name="grid_6_is_not_set_double_press_to_set_this_grid">Grid 6 is not set, double press to set this grid</string>
+  <string name="grid_7_is_not_set_double_press_to_set_this_grid">Grid 7 is not set, double press to set this grid</string>
+  <string name="grid_8_is_not_set_double_press_to_set_this_grid">Grid 8 is not set, double press to set this grid</string>
+  <string name="grid_9_is_not_set_double_press_to_set_this_grid">Grid 9 is not set, double press to set this grid</string>
 </resources>

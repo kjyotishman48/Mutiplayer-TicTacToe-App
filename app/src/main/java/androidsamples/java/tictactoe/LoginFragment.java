@@ -32,7 +32,7 @@ public class LoginFragment extends Fragment {
     private EditText mPassword;
     private ProgressDialog progressDialog;
     //Create object of DatabaseReference class to access Firebase's RealTime Database
-    DatabaseReference databaseReference = FirebaseDatabase.getInstance("https://tictactoe-c4bfa-default-rtdb.firebaseio.com/").getReference("Users");
+    DatabaseReference databaseReference = FirebaseDatabase.getInstance("https://tictactoe-c4bfa-default-rtdb.firebaseio.com/").getReference("users");
 
     private static final String TAG = "LogInFragment";
 
@@ -46,7 +46,7 @@ public class LoginFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
         if(mUser != null) {
-            NavHostFragment.findNavController(this).navigate(R.id.action_login_successful);
+            sendUserToDashBoard();
         }
     }
 
@@ -73,19 +73,19 @@ public class LoginFragment extends Fragment {
     // No options menu in login fragment.
 
     private void PerformAuth() {
-        progressDialog.show();
         String emailTxt = mEmail.getText().toString().trim();
         String passwordTxt = mPassword.getText().toString().trim();
         String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
         if(emailTxt.isEmpty()) {
             Toast.makeText(getContext(), "Please enter non empty email",Toast.LENGTH_SHORT).show();
+            progressDialog.dismiss();
             return;
         }
         else if(passwordTxt.isEmpty()) {
             Toast.makeText(getContext(),"Plaease enter non empty password",Toast.LENGTH_SHORT).show();
+            progressDialog.dismiss();
             return;
         }
-        //progressDialog.setCanceledOnTouchOutside(false);
         mAuth.createUserWithEmailAndPassword(emailTxt, passwordTxt)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -94,6 +94,10 @@ public class LoginFragment extends Fragment {
                         if(task.isSuccessful()) {
                             Toast.makeText(getContext(), "Registration Successful",Toast.LENGTH_SHORT);
                             sendUserToDashBoard();
+                            databaseReference.child(task.getResult().getUser().getUid()).child("won").setValue(0);
+                            databaseReference.child(task.getResult().getUser().getUid()).child("lost").setValue(0);
+                            databaseReference.child(task.getResult().getUser().getUid()).child("draw").setValue(0);
+                            databaseReference.child(task.getResult().getUser().getUid()).child("email").setValue(emailTxt);
                         }
                         else {
                             if(task.getException() instanceof FirebaseAuthUserCollisionException) {
@@ -104,8 +108,8 @@ public class LoginFragment extends Fragment {
                             }
                         }
                         progressDialog.dismiss();
-                }
-        });
+                    }
+                });
     }
 
     private void login(String emailTxt, String passwordTxt) {

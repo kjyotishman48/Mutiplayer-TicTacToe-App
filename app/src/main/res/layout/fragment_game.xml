@@ -12,6 +12,7 @@
       android:layout_height="wrap_content"
       android:layout_margin="@dimen/btn_margin"
       android:text="@string/blank"
+      android:contentDescription="@string/grid_1_is_not_set_double_press_to_set_this_grid"
       app:layout_constraintBottom_toTopOf="@+id/button3"
       app:layout_constraintEnd_toEndOf="@id/button3"
       app:layout_constraintStart_toStartOf="@+id/button3" />
@@ -22,6 +23,7 @@
       android:layout_height="wrap_content"
       android:layout_margin="@dimen/btn_margin"
       android:text="@string/blank"
+      android:contentDescription="@string/grid_2_is_not_set_double_press_to_set_this_grid"
       app:layout_constraintBottom_toTopOf="@+id/button4"
       app:layout_constraintEnd_toEndOf="@id/button4"
       app:layout_constraintStart_toStartOf="@+id/button4" />
@@ -32,6 +34,7 @@
       android:layout_height="wrap_content"
       android:layout_margin="@dimen/btn_margin"
       android:text="@string/blank"
+      android:contentDescription="@string/grid_3_is_not_set_double_press_to_set_this_grid"
       app:layout_constraintBottom_toTopOf="@+id/button5"
       app:layout_constraintEnd_toEndOf="@id/button5"
       app:layout_constraintStart_toStartOf="@+id/button5" />
@@ -42,6 +45,7 @@
       android:layout_height="wrap_content"
       android:layout_margin="@dimen/btn_margin"
       android:text="@string/blank"
+      android:contentDescription="@string/grid_4_is_not_set_double_press_to_set_this_grid"
       app:layout_constraintBottom_toBottomOf="@id/button4"
       app:layout_constraintEnd_toStartOf="@+id/button4"
       app:layout_constraintTop_toTopOf="@+id/button4" />
@@ -52,6 +56,7 @@
       android:layout_height="wrap_content"
       android:layout_margin="@dimen/btn_margin"
       android:text="@string/blank"
+      android:contentDescription="@string/grid_5_is_not_set_double_press_to_set_this_grid"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
@@ -63,6 +68,7 @@
       android:layout_height="wrap_content"
       android:layout_margin="@dimen/btn_margin"
       android:text="@string/blank"
+      android:contentDescription="@string/grid_6_is_not_set_double_press_to_set_this_grid"
       app:layout_constraintBottom_toBottomOf="@id/button4"
       app:layout_constraintStart_toEndOf="@+id/button4"
       app:layout_constraintTop_toTopOf="@+id/button4" />
@@ -73,6 +79,7 @@
       android:layout_height="wrap_content"
       android:layout_margin="@dimen/btn_margin"
       android:text="@string/blank"
+      android:contentDescription="@string/grid_7_is_not_set_double_press_to_set_this_grid"
       app:layout_constraintEnd_toEndOf="@id/button3"
       app:layout_constraintStart_toStartOf="@+id/button3"
       app:layout_constraintTop_toBottomOf="@id/button3" />
@@ -83,6 +90,7 @@
       android:layout_height="wrap_content"
       android:layout_margin="@dimen/btn_margin"
       android:text="@string/blank"
+      android:contentDescription="@string/grid_8_is_not_set_double_press_to_set_this_grid"
       app:layout_constraintEnd_toEndOf="@id/button4"
       app:layout_constraintStart_toStartOf="@+id/button4"
       app:layout_constraintTop_toBottomOf="@id/button4" />
@@ -93,7 +101,9 @@
       android:layout_height="wrap_content"
       android:layout_margin="@dimen/btn_margin"
       android:text="@string/blank"
+      android:contentDescription="@string/grid_9_is_not_set_double_press_to_set_this_grid"
       app:layout_constraintEnd_toEndOf="@id/button5"
       app:layout_constraintStart_toStartOf="@+id/button5"
       app:layout_constraintTop_toBottomOf="@id/button5" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
