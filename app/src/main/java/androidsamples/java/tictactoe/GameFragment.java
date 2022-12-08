@@ -244,12 +244,10 @@ public class GameFragment extends Fragment {
           Log.d(TAG,"Line 343" + gameEnded);
           hostLeft = snapshot.child("hostLeft").getValue().toString();
           guestLeft = snapshot.child("guestLeft").getValue().toString();
-          Log.d(TAG, "hostleft = "+hostLeft+ "guestleft = "+guestLeft);
+          Log.d(TAG, "hostleft = "+hostLeft+ " guestleft = "+guestLeft);
+          Log.d(TAG,"GAME ENDED ="+gameEnded);
           if(!userQuit) {
             checkIfUserLeft();
-          }
-          if(gameEnded) {
-            return;
           }
           GameModel latestGameModel = snapshot.getValue(GameModel.class);
           assert latestGameModel != null;
@@ -261,7 +259,6 @@ public class GameFragment extends Fragment {
           int win = checkWin();
           if (win !=0) endGame(win);
         }
-
         @Override
         public void onCancelled(@NonNull DatabaseError error) {
 
@@ -382,8 +379,7 @@ public class GameFragment extends Fragment {
           });
         }
     }
-    gameEnded = true;
-    if(!userQuit) {
+    if(!userQuit && !gameEnded) {
       //since have to show to show this dialog box only if the game ends with neither of host or guest quitting
       AlertDialog dialog = new AlertDialog.Builder(requireActivity())
               .setTitle("Game Result").setMessage(dialogMessage)
@@ -392,6 +388,7 @@ public class GameFragment extends Fragment {
               }).create();
       dialog.show();
     }
+    gameEnded = true;
   }
 
   private boolean updateTurn (int turn) {
