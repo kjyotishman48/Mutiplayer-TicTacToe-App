@@ -77,30 +77,16 @@ public class GameFragment extends Fragment {
           assert game != null;
           gameArray = (game.getGameArray()).toArray(new String[9]);
           updateContentDescription();
-          if (game.getTurn() == 1) {
-            if (game.getHost().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-              isHost = true;
-              myTurn = true;
-              myChar = "X";
-              otherChar = "O";
-            } else {
-              isHost = false;
-              myTurn = false;
-              myChar = "O";
-              otherChar = "X";
-            }
+          if (game.getHost().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+            isHost = true;
+            myTurn = false;
+            myChar = "X";
+            otherChar = "O";
           } else {
-            if (!game.getHost().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-              myTurn = true;
-              myChar = "O";
-              otherChar = "X";
-              isHost = false;
-            } else {
-              isHost = true;
-              myTurn = false;
-              myChar = "X";
-              otherChar = "O";
-            }
+            isHost = false;
+            myTurn = true;
+            myChar = "O";
+            otherChar = "X";
           }
         }
         @Override
@@ -141,7 +127,7 @@ public class GameFragment extends Fragment {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                           Log.d(TAG,"Line 138");
-                          Log.d(TAG,"closing game");
+                          Log.d(TAG,"Closing game");
                           game.setIsOpen(false);
                           snapshot.getRef().child("isOpen").setValue(false);
                           if(game.getHost().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
@@ -152,7 +138,6 @@ public class GameFragment extends Fragment {
                             game.setGuestLeft(true);
                             snapshot.getRef().child("guestLeft").setValue(true);
                           }
-                          waitForOtherPlayer();
                           checkIfUserLeft();
                         }
 
@@ -207,23 +192,9 @@ public class GameFragment extends Fragment {
     return inflater.inflate(R.layout.fragment_game, container, false);
   }
 
-  @SuppressLint("SetTextI18n")
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-
-    if (!isSinglePlayer) {
-      boolean check = false;
-      for (String s : gameArray) {
-        if (!s.isEmpty()) {
-          check = true;
-          break;
-        }
-      }
-      if (!check) {
-        waitForOtherPlayer();
-      }
-    }
 
     mNavController = Navigation.findNavController(view);
 
@@ -246,38 +217,77 @@ public class GameFragment extends Fragment {
           Log.d(TAG, "Button " + finalI + " clicked");
           ((Button) v).setText(myChar);
           gameArray[finalI] = myChar;
+          if (!isSinglePlayer) {
+            updateDB();
+          }
           v.setClickable(false);
           updateContentDescription();
-          if (!isSinglePlayer) {
-            Log.d(TAG,"fix 1");
-            updateDB();
-            myTurn = updateTurn(game.getTurn());
-          }
           int win = checkWin();
-          if (win == 1 || win == -1) {
+          if (win!=0) {
             endGame(win);
             return;
           }
-          else if (checkDraw()) {
-            endGame(0);
-            return;
-          }
           myTurn = !myTurn;
-
           if (isSinglePlayer) {
             automateSinglePlayerGame();
-          } else {
-            waitForOtherPlayer();
           }
         } else {
           Toast.makeText(getContext(), "Please wait for your turn!", Toast.LENGTH_SHORT).show();
         }
       });
     }
+
+    if(!isSinglePlayer) {
+      gameReference.addValueEventListener(new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+          Log.d(TAG,"Line 343" + gameEnded);
+          hostLeft = snapshot.child("hostLeft").getValue().toString();
+          guestLeft = snapshot.child("guestLeft").getValue().toString();
+          Log.d(TAG, "hostleft = "+hostLeft+ "guestleft = "+guestLeft);
+          if(!userQuit) {
+            checkIfUserLeft();
+          }
+          if(gameEnded) {
+            return;
+          }
+          GameModel latestGameModel = snapshot.getValue(GameModel.class);
+          assert latestGameModel != null;
+          game.updateGameArray(latestGameModel);
+          gameArray = (game.getGameArray()).toArray(new String[9]);
+          updateUI();
+          updateContentDescription();
+          myTurn = updateTurn(game.getTurn());
+          int win = checkWin();
+          if (win !=0) endGame(win);
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+
+        }
+      });
+    }
+  }
+
+  private void automateSinglePlayerGame() {
+    Random rand = new Random();
+    int x = rand.nextInt(9);
+    if (checkDraw()) {
+      endGame(0);
+      return;
+    }
+    while (!gameArray[x].isEmpty()) x = rand.nextInt(9);
+    gameArray[x] = otherChar;
+    mButtons[x].setText(otherChar);
+    mButtons[x].setClickable(false);
+    updateContentDescription();
+    myTurn = !myTurn;
+    int win = checkWin();
+    if (win != 0) endGame(win);
   }
 
   private boolean checkDraw() {
-    if (checkWin() != 0) return false;
     for (int i = 0; i < 9; i++) {
       if (gameArray[i].isEmpty()) {
         return false;
@@ -286,7 +296,33 @@ public class GameFragment extends Fragment {
     return true;
   }
 
-  @SuppressLint("SetTextI18n")
+  private int checkWin() {
+    String winChar = "";
+    if  (gameArray[0].equals(gameArray[1]) && gameArray[1].equals(gameArray[2]) && !gameArray[0].isEmpty()) winChar = gameArray[0];
+    else if (gameArray[3].equals(gameArray[4]) && gameArray[4].equals(gameArray[5]) && !gameArray[3].isEmpty()) winChar = gameArray[3];
+    else if (gameArray[6].equals(gameArray[7]) && gameArray[7].equals(gameArray[8]) && !gameArray[6].isEmpty()) winChar = gameArray[6];
+    else if (gameArray[0].equals(gameArray[3]) && gameArray[3].equals(gameArray[6]) && !gameArray[0].isEmpty()) winChar = gameArray[0];
+    else if (gameArray[4].equals(gameArray[1]) && gameArray[1].equals(gameArray[7]) && !gameArray[1].isEmpty()) winChar = gameArray[1];
+    else if (gameArray[2].equals(gameArray[5]) && gameArray[5].equals(gameArray[8]) && !gameArray[2].isEmpty()) winChar = gameArray[2];
+    else if (gameArray[0].equals(gameArray[4]) && gameArray[4].equals(gameArray[8]) && !gameArray[0].isEmpty()) winChar = gameArray[0];
+    else if (gameArray[6].equals(gameArray[4]) && gameArray[4].equals(gameArray[2]) && !gameArray[2].isEmpty()) winChar = gameArray[2];
+    else if(checkDraw()) return 2; // for draw
+    else return 0;
+
+    return (winChar.equals(myChar)) ? 1 : -1;
+  }
+
+  private void updateDB() {
+    gameReference.child("gameArray").setValue(Arrays.asList(gameArray));
+    if (game.getTurn() == 1) {
+      game.setTurn(2);
+      gameReference.child("turn").setValue(game.getTurn());
+    } else if(game.getTurn()==2){
+      game.setTurn(1);
+      gameReference.child("turn").setValue(game.getTurn());
+    }
+  }
+
   private void endGame(int win) {
     switch (win) {
       case 1:
@@ -327,7 +363,7 @@ public class GameFragment extends Fragment {
           });
         }
         break;
-      case 0:
+      case 2:
         dialogMessage = "Game is drawn";
         if(!gameEnded) {
           userReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -345,15 +381,10 @@ public class GameFragment extends Fragment {
             }
           });
         }
-        break;
-      default:
-        break;
-    }
-    for (int i = 0; i < 9; i++) {
-      mButtons[i].setClickable(false);
     }
     gameEnded = true;
     if(!userQuit) {
+      //since have to show to show this dialog box only if the game ends with neither of host or guest quitting
       AlertDialog dialog = new AlertDialog.Builder(requireActivity())
               .setTitle("Game Result").setMessage(dialogMessage)
               .setPositiveButton(R.string.ok, (d, which) -> {
@@ -361,46 +392,6 @@ public class GameFragment extends Fragment {
               }).create();
       dialog.show();
     }
-
-    if(!isSinglePlayer) {
-      Log.d(TAG, "fix 2");
-      Log.d(TAG,"HERE" + game.getIsOpen().toString());
-      updateDB();
-    }
-  }
-
-  private void waitForOtherPlayer() {
-
-    gameReference.addValueEventListener(new ValueEventListener() {
-      @Override
-      public void onDataChange(@NonNull DataSnapshot snapshot) {
-        Log.d(TAG,"Line 343" + gameEnded);
-        hostLeft = snapshot.child("hostLeft").getValue().toString();
-        guestLeft = snapshot.child("guestLeft").getValue().toString();
-        Log.d(TAG, "hostleft = "+hostLeft+ "guestleft = "+guestLeft);
-        if(!userQuit) {
-          checkIfUserLeft();
-        }
-        if(gameEnded) {
-          return;
-        }
-        GameModel latestGameModel = snapshot.getValue(GameModel.class);
-        assert latestGameModel != null;
-        game.updateGameArray(latestGameModel);
-        gameArray = (game.getGameArray()).toArray(new String[9]);
-        updateUI();
-        updateContentDescription();
-        myTurn = updateTurn(game.getTurn());
-        int win = checkWin();
-        if (win == 1 || win == -1) endGame(win);
-        else if (checkDraw()) endGame(0);
-      }
-
-      @Override
-      public void onCancelled(@NonNull DatabaseError error) {
-
-      }
-    });
   }
 
   private boolean updateTurn (int turn) {
@@ -415,50 +406,6 @@ public class GameFragment extends Fragment {
         mButtons[i].setClickable(false);
       }
     }
-  }
-
-  private void updateDB() {
-    gameReference.child("gameArray").setValue(Arrays.asList(gameArray));
-    if (game.getTurn() == 1) {
-      game.setTurn(2);
-      gameReference.child("turn").setValue(game.getTurn());
-    } else if(game.getTurn()==2){
-      game.setTurn(1);
-      gameReference.child("turn").setValue(game.getTurn());
-    }
-  }
-
-  private void automateSinglePlayerGame() {
-    Random rand = new Random();
-    int x = rand.nextInt(9);
-    if (checkDraw()) {
-      endGame(0);
-      return;
-    }
-    while (!gameArray[x].isEmpty()) x = rand.nextInt(9);
-    gameArray[x] = otherChar;
-    mButtons[x].setText(otherChar);
-    mButtons[x].setClickable(false);
-    updateContentDescription();
-    myTurn = !myTurn;
-    int win = checkWin();
-    if (win == 1 || win == -1) endGame(win);
-    else if (checkDraw()) endGame(0);
-  }
-
-  private int checkWin() {
-    String winChar = "";
-    if  (gameArray[0].equals(gameArray[1]) && gameArray[1].equals(gameArray[2]) && !gameArray[0].isEmpty()) winChar = gameArray[0];
-    else if (gameArray[3].equals(gameArray[4]) && gameArray[4].equals(gameArray[5]) && !gameArray[3].isEmpty()) winChar = gameArray[3];
-    else if (gameArray[6].equals(gameArray[7]) && gameArray[7].equals(gameArray[8]) && !gameArray[6].isEmpty()) winChar = gameArray[6];
-    else if (gameArray[0].equals(gameArray[3]) && gameArray[3].equals(gameArray[6]) && !gameArray[0].isEmpty()) winChar = gameArray[0];
-    else if (gameArray[4].equals(gameArray[1]) && gameArray[1].equals(gameArray[7]) && !gameArray[1].isEmpty()) winChar = gameArray[1];
-    else if (gameArray[2].equals(gameArray[5]) && gameArray[5].equals(gameArray[8]) && !gameArray[2].isEmpty()) winChar = gameArray[2];
-    else if (gameArray[0].equals(gameArray[4]) && gameArray[4].equals(gameArray[8]) && !gameArray[0].isEmpty()) winChar = gameArray[0];
-    else if (gameArray[6].equals(gameArray[4]) && gameArray[4].equals(gameArray[2]) && !gameArray[2].isEmpty()) winChar = gameArray[2];
-    else return 0;
-
-    return (winChar.equals(myChar)) ? 1 : -1;
   }
 
 //  @Override
