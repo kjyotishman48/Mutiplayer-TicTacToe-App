@@ -31,6 +31,8 @@ This app is a tic tac toe game app, where the user can sign into the app using t
 ### Known bugs
  
 When the user is in dashboard fragment and if they press back button of the device, the app navigates to the login fragment, although the user is still logged in. This issue happens occasionally, for example after playing a multiplayer game.
+
+The app doesnot have a separate layout for landscape mode, hence it is adviced to use the app on potrait mode only for proper functionality
  
 ## C) Brief Description of how the task was completed
  
