@@ -12,8 +12,8 @@
       android:layout_height="wrap_content"
       android:layout_margin="@dimen/text_margin"
       android:autofillHints="@string/email"
+      android:contentDescription="@string/enter_your_email_here"
       android:hint="@string/email"
-      android:contentDescription="Enter your email here"
       android:inputType="textEmailAddress"
       android:minHeight="48dp"
       android:textColorHint="@color/hint_text_color"
@@ -22,7 +22,8 @@
       app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
-      app:layout_constraintVertical_chainStyle="packed" />
+      app:layout_constraintVertical_chainStyle="packed"
+      tools:ignore="ContentDescription,EditableContentDescCheck,EditableContentDescCheck" />
 
   <EditText
       android:id="@+id/edit_password"
@@ -30,9 +31,9 @@
       android:layout_height="wrap_content"
       android:layout_margin="@dimen/text_margin"
       android:autofillHints="Password"
+      android:contentDescription="@string/enter_your_password_here"
       android:ems="10"
       android:hint="@string/password"
-      android:contentDescription="Enter your password here"
       android:inputType="textPassword"
       android:minHeight="48dp"
       android:textColorHint="@color/hint_text_color"
@@ -40,14 +41,15 @@
       app:layout_constraintEnd_toEndOf="@+id/edit_email"
       app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintStart_toStartOf="@+id/edit_email"
-      app:layout_constraintTop_toBottomOf="@+id/edit_email" />
+      app:layout_constraintTop_toBottomOf="@+id/edit_email"
+      tools:ignore="ContentDescription,EditableContentDescCheck" />
 
   <Button
       android:id="@+id/btn_log_in"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:text="@string/login"
-      android:contentDescription="Click here to register or login"
+      android:contentDescription="@string/press_here_to_register_or_login"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="@+id/edit_password"
       app:layout_constraintHorizontal_bias="0.5"

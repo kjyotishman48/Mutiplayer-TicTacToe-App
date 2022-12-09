@@ -54,4 +54,5 @@
     <string name="grid_7_is_not_set_double_press_to_set_this_grid">Grid 7 is not set, double press to set this grid</string>
     <string name="grid_8_is_not_set_double_press_to_set_this_grid">Grid 8 is not set, double press to set this grid</string>
     <string name="grid_9_is_not_set_double_press_to_set_this_grid">Grid 9 is not set, double press to set this grid</string>
+    <string name="enter_your_password_here">Enter your password here</string>
 </resources>

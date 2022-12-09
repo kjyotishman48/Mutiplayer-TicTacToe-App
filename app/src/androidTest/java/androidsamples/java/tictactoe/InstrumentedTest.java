@@ -45,7 +45,7 @@ public class InstrumentedTest {
         //Must be initially logged out of the device
         UiObject emailBox = device.findObject(new UiSelector().clickable(true).descriptionMatches("Enter your email here"));
         UiObject passwordBox = device.findObject(new UiSelector().clickable(true).descriptionMatches("Enter your password here"));
-        UiObject loginBtn = device.findObject(new UiSelector().clickable(true).descriptionMatches("Click here to register or login"));
+        UiObject loginBtn = device.findObject(new UiSelector().clickable(true).descriptionMatches("Press here to register or login"));
         emailBox.waitForExists(TIMEOUT);
         passwordBox.waitForExists(TIMEOUT);
         loginBtn.waitForExists(TIMEOUT);
