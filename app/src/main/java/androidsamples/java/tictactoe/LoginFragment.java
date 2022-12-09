@@ -104,7 +104,7 @@ public class LoginFragment extends Fragment {
                                 login(emailTxt, passwordTxt);
                             }
                             else {
-                                Toast.makeText(getContext(), "Registration Failed", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "Incorrect password", Toast.LENGTH_SHORT).show();
                             }
                         }
                         progressDialog.dismiss();
