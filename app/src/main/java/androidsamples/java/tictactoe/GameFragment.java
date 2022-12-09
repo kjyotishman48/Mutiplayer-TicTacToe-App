@@ -268,10 +268,6 @@ public class GameFragment extends Fragment {
   private void automateSinglePlayerGame() {
     Random rand = new Random();
     int x = rand.nextInt(9);
-    if (checkDraw()) {
-      endGame(0);
-      return;
-    }
     while (!gameArray[x].isEmpty()) x = rand.nextInt(9);
     gameArray[x] = otherChar;
     mButtons[x].setText(otherChar);
