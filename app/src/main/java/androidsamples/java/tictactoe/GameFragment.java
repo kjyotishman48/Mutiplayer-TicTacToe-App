@@ -54,6 +54,7 @@ public class GameFragment extends Fragment {
   private String hostLeft = "false";
   private String guestLeft = "false";
   private boolean userQuit = false;
+  private String isOpen = "false";
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,7 +73,7 @@ public class GameFragment extends Fragment {
     gameReference.addListenerForSingleValueEvent(new ValueEventListener() {
       @Override
       public void onDataChange(@NonNull DataSnapshot snapshot) {
-        Log.d(TAG,"Line 75");
+        Log.d(TAG,"Line 76");
         game = snapshot.getValue(GameModel.class);
         assert game != null;
         gameArray = (game.getGameArray()).toArray(new String[9]);
@@ -82,6 +83,7 @@ public class GameFragment extends Fragment {
           isHost = true;
           myTurn = updateTurn(game.getTurn());
           myChar = "X";
+          otherChar = "O";
           otherChar = "O";
         } else {
           isHost = false;
@@ -109,31 +111,19 @@ public class GameFragment extends Fragment {
                   .setMessage(R.string.forfeit_game_dialog_message)
                   .setPositiveButton(R.string.yes, (d, which) -> {
                     gameEnded = true;
-                    userReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                      @Override
-                      public void onDataChange(DataSnapshot dataSnapshot) {
-                        Log.d(TAG,"Line 124");
-                        int value = Integer.parseInt(dataSnapshot.child("lost").getValue().toString());
-                        value = value + 1;
-                        dataSnapshot.getRef().child("lost").setValue(value);
-                      }
-
-                      @Override
-                      public void onCancelled(@NonNull DatabaseError error) {
-
-                      }
-                    });
                     if (!isSinglePlayer) {
                       gameReference.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                          Log.d(TAG,"Line 130");
+                          Log.d(TAG,"Line 118");
                           Log.d(TAG,"Closing game");
                           game.setIsOpen(false);
                           snapshot.getRef().child("isOpen").setValue(false);
                           if(game.getHost().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
                             game.setHostLeft(true);
                             snapshot.getRef().child("hostLeft").setValue(true);
+                            isOpen = Objects.requireNonNull(snapshot.child("isOpen").getValue()).toString();
+                            Log.d(TAG,"is Open = "+isOpen);
                           }
                           else {
                             game.setGuestLeft(true);
@@ -148,6 +138,22 @@ public class GameFragment extends Fragment {
                         }
                       });
                     }
+                    userReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                      @Override
+                      public void onDataChange(DataSnapshot dataSnapshot) {
+                        Log.d(TAG,"Line 144");
+                        if(isOpen.equals("false")) {
+                          int value = Integer.parseInt(dataSnapshot.child("lost").getValue().toString());
+                          value = value + 1;
+                          dataSnapshot.getRef().child("lost").setValue(value);
+                        }
+                      }
+
+                      @Override
+                      public void onCancelled(@NonNull DatabaseError error) {
+
+                      }
+                    });
                     mNavController.popBackStack();
                   })
                   .setNegativeButton(R.string.cancel, (d, which) -> d.dismiss())
@@ -239,7 +245,7 @@ public class GameFragment extends Fragment {
       gameReference.addValueEventListener(new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
-          Log.d(TAG,"Line 243" + gameEnded);
+          Log.d(TAG,"Line 248" + gameEnded);
           hostLeft = snapshot.child("hostLeft").getValue().toString();
           guestLeft = snapshot.child("guestLeft").getValue().toString();
           Log.d(TAG, "hostleft = "+hostLeft+ " guestleft = "+guestLeft);
@@ -251,6 +257,8 @@ public class GameFragment extends Fragment {
           assert latestGameModel != null;
           game.updateGameArray(latestGameModel);
           gameArray = (game.getGameArray()).toArray(new String[9]);
+          isOpen = snapshot.child("isOpen").getValue().toString();
+          Log.d(TAG,"is Open = "+isOpen);
           updateUI();
           updateContentDescription();
           myTurn = updateTurn(game.getTurn());
@@ -323,7 +331,7 @@ public class GameFragment extends Fragment {
           userReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-              Log.d(TAG,"Line 268");
+              Log.d(TAG,"Line 334");
               int value = Integer.parseInt(dataSnapshot.child("won").getValue().toString());
               value = value + 1;
               dataSnapshot.getRef().child("won").setValue(value);
@@ -342,7 +350,7 @@ public class GameFragment extends Fragment {
           userReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-              Log.d(TAG,"Line 350");
+              Log.d(TAG,"Line 353");
               int value = Integer.parseInt(dataSnapshot.child("lost").getValue().toString());
               value = value + 1;
               dataSnapshot.getRef().child("lost").setValue(value);
@@ -361,7 +369,7 @@ public class GameFragment extends Fragment {
           userReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-              Log.d(TAG,"Line 369");
+              Log.d(TAG,"Line 372");
               int value = Integer.parseInt(snapshot.child("draw").getValue().toString());
               value = value + 1;
               snapshot.getRef().child("draw").setValue(value);
