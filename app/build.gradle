@@ -59,4 +59,8 @@ dependencies {
   // Add the dependency for the Firebase Authentication library
   // When using the BoM, you don't specify versions in Firebase library dependencies
   implementation 'com.google.firebase:firebase-auth'
+
+  androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
+  androidTestImplementation 'androidx.test.espresso:espresso-accessibility:3.5.0-alpha01'
+
 }
