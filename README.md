@@ -11,6 +11,14 @@
 ### Description of the App
  
 This app is a tic tac toe game app, where the user can sign into the app using thier email and then can play either single player or multiplayer tic tac toe game. Every time they play a game their stats - wins, loses and draws are recorded and is displayed on the dashboard. The dashboard also shows the list of mutiplayer tic tac toe games which are available to play (i.e host has created a game and is looking for an opponent), which the user can join and play. Authentication is implemented using Firebase and the multiplayer game is implemented using firebase realtime database.
+
+### Known bugs
+ 
+When the user is in dashboard fragment and if they press back button of the device, the app navigates to the login fragment, although the user is still logged in. This issue happens occasionally, for example after playing a multiplayer game.
+
+The app doesnot have a separate layout for landscape mode layout, but the functionality of the app is perfectly fine even in landscape mode.
+
+If a player is in a multiplayer game closed the game via task manager the game should be stopped but it doesnot i.e. the game continues.
  
 ### Screenshots from App
 <p align="center">
@@ -27,14 +35,6 @@ This app is a tic tac toe game app, where the user can sign into the app using t
    <img width="220" height="430" src="https://user-images.githubusercontent.com/68853069/206187255-feb88b0f-36a7-42e9-a1c1-b0bbc31f857f.png"> &nbsp;
    <img width="220" height="430" src="https://user-images.githubusercontent.com/68853069/206187461-13bf997d-c4b3-4d7c-bfa2-03cbf920046d.png">
 </p>
- 
-### Known bugs
- 
-When the user is in dashboard fragment and if they press back button of the device, the app navigates to the login fragment, although the user is still logged in. This issue happens occasionally, for example after playing a multiplayer game.
-
-The app doesnot have a separate layout for landscape mode, hence it is adviced to use the app on potrait mode only for proper functionality. Also I have disabled landscape mode for this app in the manifest file.
-
-If a player is in a multiplayer game closed the game via task manager the game should be stopped but it doesnot i.e. the game continues.
  
 ## C) Brief Description of how the task was completed
  
