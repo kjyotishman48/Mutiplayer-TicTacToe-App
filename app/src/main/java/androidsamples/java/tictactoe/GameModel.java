@@ -15,15 +15,15 @@ public class GameModel {
     private boolean hostLeft;
     private boolean guestLeft;
 
-    public GameModel(String host, String id, String email, boolean hostLeft, boolean guestLeft) {
+    public GameModel(String host, String id, String email, boolean hostLeft, boolean guestLeft, boolean isOpen, int turn) {
         this.host = host;
-        isOpen = true;
+        this.isOpen = isOpen;
         gameArray = Arrays.asList("", "", "", "", "", "", "", "", "");
         this.gameId = id;
-        turn = 0;
         hostEmail = email;
         this.hostLeft = hostLeft;
         this.guestLeft = guestLeft;
+        this.turn = turn;
     }
 
     public GameModel(){}

@@ -129,13 +129,14 @@ public class DashboardFragment extends Fragment {
       DialogInterface.OnClickListener listener = (dialog, which) -> {
         String gameType = "No type";
         String gameId = "Single Game ID";
+        gameId = gamesRef.push().getKey();
+        assert gameId != null;
         if (which == DialogInterface.BUTTON_POSITIVE) {
           gameType = getString(R.string.two_player);
-          gameId = gamesRef.push().getKey();
-          assert gameId != null;
-          gamesRef.child(gameId).setValue(new GameModel(FirebaseAuth.getInstance().getCurrentUser().getUid(), gameId, email_id, false, false));
+          gamesRef.child(gameId).setValue(new GameModel(FirebaseAuth.getInstance().getCurrentUser().getUid(), gameId, email_id, false, false, true,0));
         } else if (which == DialogInterface.BUTTON_NEGATIVE) {
           gameType = getString(R.string.one_player);
+          gamesRef.child(gameId).setValue(new GameModel(FirebaseAuth.getInstance().getCurrentUser().getUid(), gameId, email_id, false, false, false,1));
         }
         Log.d(TAG, "New Game: " + gameType);
 

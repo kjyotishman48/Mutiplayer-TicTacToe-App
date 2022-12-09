@@ -67,39 +67,40 @@ public class GameFragment extends Fragment {
 
     userReference = FirebaseDatabase.getInstance("https://tictactoe-c4bfa-default-rtdb.firebaseio.com/").getReference("users").child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
 
-    if (!isSinglePlayer) {
-      gameReference = FirebaseDatabase.getInstance("https://tictactoe-c4bfa-default-rtdb.firebaseio.com/").getReference("games").child(args.getGameId());
-      gameReference.addListenerForSingleValueEvent(new ValueEventListener() {
-        @Override
-        public void onDataChange(@NonNull DataSnapshot snapshot) {
-          Log.d(TAG,"Line 72");
-          game = snapshot.getValue(GameModel.class);
-          assert game != null;
-          gameArray = (game.getGameArray()).toArray(new String[9]);
-          updateContentDescription();
-          if (game.getHost().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-            isHost = true;
-            myTurn = false;
-            myChar = "X";
-            otherChar = "O";
-          } else {
-            isHost = false;
-            myTurn = true;
-            myChar = "O";
-            otherChar = "X";
-          }
+
+    gameReference = FirebaseDatabase.getInstance("https://tictactoe-c4bfa-default-rtdb.firebaseio.com/").getReference("games").child(args.getGameId());
+    gameReference.addListenerForSingleValueEvent(new ValueEventListener() {
+      @Override
+      public void onDataChange(@NonNull DataSnapshot snapshot) {
+        Log.d(TAG,"Line 75");
+        game = snapshot.getValue(GameModel.class);
+        assert game != null;
+        gameArray = (game.getGameArray()).toArray(new String[9]);
+        updateUI();
+        updateContentDescription();
+        if (game.getHost().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+          isHost = true;
+          myTurn = updateTurn(game.getTurn());
+          myChar = "X";
+          otherChar = "O";
+        } else {
+          isHost = false;
+          myTurn = updateTurn(game.getTurn());
+          myChar = "O";
+          otherChar = "X";
         }
-        @Override
-        public void onCancelled(@NonNull DatabaseError error) {
-          Log.e("Game setup error", error.getMessage());
-        }
-      });
-    }
+      }
+      @Override
+      public void onCancelled(@NonNull DatabaseError error) {
+        Log.e("Game setup error", error.getMessage());
+      }
+    });
 
     // Handle the back press by adding a confirmation dialog
     OnBackPressedCallback callback = new OnBackPressedCallback(true) {
       @Override
       public void handleOnBackPressed() {
+        userQuit = true;
         Log.d(TAG, "Back pressed"+gameEnded);
         if (!gameEnded) {
           Log.d(TAG,"Game Ended");
@@ -126,7 +127,7 @@ public class GameFragment extends Fragment {
                       gameReference.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                          Log.d(TAG,"Line 138");
+                          Log.d(TAG,"Line 130");
                           Log.d(TAG,"Closing game");
                           game.setIsOpen(false);
                           snapshot.getRef().child("isOpen").setValue(false);
@@ -153,7 +154,6 @@ public class GameFragment extends Fragment {
                   .create();
           dialog.show();
         } else {
-          assert getParentFragment() != null;
           NavHostFragment.findNavController(getParentFragment()).navigateUp();
         }
       }
@@ -217,9 +217,7 @@ public class GameFragment extends Fragment {
           Log.d(TAG, "Button " + finalI + " clicked");
           ((Button) v).setText(myChar);
           gameArray[finalI] = myChar;
-          if (!isSinglePlayer) {
-            updateDB();
-          }
+          updateDB();
           v.setClickable(false);
           updateContentDescription();
           int win = checkWin();
@@ -241,7 +239,7 @@ public class GameFragment extends Fragment {
       gameReference.addValueEventListener(new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
-          Log.d(TAG,"Line 343" + gameEnded);
+          Log.d(TAG,"Line 243" + gameEnded);
           hostLeft = snapshot.child("hostLeft").getValue().toString();
           guestLeft = snapshot.child("guestLeft").getValue().toString();
           Log.d(TAG, "hostleft = "+hostLeft+ " guestleft = "+guestLeft);
@@ -278,6 +276,7 @@ public class GameFragment extends Fragment {
     gameArray[x] = otherChar;
     mButtons[x].setText(otherChar);
     mButtons[x].setClickable(false);
+    updateDB();
     updateContentDescription();
     myTurn = !myTurn;
     int win = checkWin();
@@ -347,7 +346,7 @@ public class GameFragment extends Fragment {
           userReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-              Log.d(TAG,"Line 287");
+              Log.d(TAG,"Line 350");
               int value = Integer.parseInt(dataSnapshot.child("lost").getValue().toString());
               value = value + 1;
               dataSnapshot.getRef().child("lost").setValue(value);
@@ -366,7 +365,7 @@ public class GameFragment extends Fragment {
           userReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-              Log.d(TAG,"Line 306");
+              Log.d(TAG,"Line 369");
               int value = Integer.parseInt(snapshot.child("draw").getValue().toString());
               value = value + 1;
               snapshot.getRef().child("draw").setValue(value);
