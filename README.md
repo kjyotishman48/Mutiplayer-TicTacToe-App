@@ -131,7 +131,11 @@ But if someone want to host the app and see the firebase database, they need to 
 - After these changes the app will be hosted in the firebase.
  
 ## E) Testing
- 
+Yes I followed test driven approach <br>
+I have instrumented tested using uiautomator and have also enabled accessibility checks at the same time. I have written a test case for the login fragment, <b>so for this test case to be passed the app should be present in the login fragment (in the device, emulator with which this test is performed).</b></br>
+<p align="center">
+   <img width="780" height="500" src="https://user-images.githubusercontent.com/68853069/206641730-971072c7-3935-4410-9196-19389509cb41.png"> 
+</p>
 Yes I did use the Monkey Tool (with 2000 events)</br>
 I ran monkey in my emulator it ran succesfully without any crash <br>
 <p align="center">
